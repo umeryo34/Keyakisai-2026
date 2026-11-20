@@ -12,7 +12,7 @@ interface ProductListProps {
 export function ProductList({ products, onOpen, onLocate }: ProductListProps) {
   if (products.length === 0) {
     return (
-      <p className="rounded-2xl bg-slate-900/70 px-4 py-8 text-center text-sm text-slate-400">
+      <p className="rounded-2xl bg-white/70 dark:bg-slate-900/70 px-4 py-8 text-center text-sm text-slate-500 dark:text-slate-400">
         展示プロダクトはまだ登録されていません。
       </p>
     );

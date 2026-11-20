@@ -1,9 +1,16 @@
 "use client";
 
-import { Code, ExternalLink, MapPin, Smartphone } from "lucide-react";
-import { CATEGORY_BADGE, formatAuthors } from "@/lib/labels";
+import { ExternalLink, MapPin } from "lucide-react";
+import { getBoothByProduct } from "@/data/booths";
+import { formatAuthors } from "@/lib/labels";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/types/product";
+
+function hasQuickLink(product: Product) {
+  return Boolean(
+    product.links.web || product.links.slide,
+  );
+}
 
 interface ProductCardProps {
   product: Product;
@@ -12,56 +19,56 @@ interface ProductCardProps {
 }
 
 export function ProductCard({ product, onOpen, onLocate }: ProductCardProps) {
+  const booth = getBoothByProduct(product.id);
   return (
-    <article className="overflow-hidden rounded-3xl border border-white/8 bg-slate-900/80 shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
+    <article className="overflow-hidden rounded-3xl border border-black/8 dark:border-white/8 bg-white/80 dark:bg-slate-900/80 shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
       <button type="button" onClick={() => onOpen(product)} className="block w-full text-left">
-        <div className="relative aspect-video overflow-hidden bg-slate-800">
+        <div className="relative aspect-video overflow-hidden bg-slate-200 dark:bg-slate-800">
           {/* eslint-disable-next-line @next/next/no-img-element */}
-          <img src={product.thumbnail} alt="" className="h-full w-full object-cover" />
+          <img
+            src={product.thumbnail}
+            alt=""
+            className="h-full w-full bg-rose-100 dark:bg-[#f4f1ec] object-contain"
+          />
           <div className="absolute inset-x-3 top-3 flex gap-2">
-            <span className="rounded-full bg-black/55 px-2.5 py-1 text-[11px] font-semibold text-rose-100 backdrop-blur-md">
-              {CATEGORY_BADGE[product.category]}
-            </span>
-            <span className="rounded-full bg-[#FF6B81]/90 px-2.5 py-1 text-[11px] font-semibold text-white">
-              Table {product.tableId}
-            </span>
+            {booth ? (
+              <span className="rounded-full bg-[#FF6B81]/90 px-2.5 py-1 text-[11px] font-semibold text-white">
+                ブース {booth.id}
+              </span>
+            ) : null}
           </div>
         </div>
         <div className="space-y-1.5 px-4 pt-4">
-          <h2 className="text-[17px] font-semibold tracking-tight text-white">{product.title}</h2>
-          <p className="truncate text-sm text-slate-300">{product.catchphrase}</p>
-          <p className="text-xs text-slate-500">{formatAuthors(product.authors)}</p>
+          <h2 className="text-[17px] font-semibold tracking-tight text-slate-900 dark:text-white">{product.title}</h2>
+          <p className="truncate text-sm text-slate-600 dark:text-slate-300">{product.catchphrase}</p>
+          <p className="text-xs text-slate-500">{formatAuthors(product.authors, product.team)}</p>
         </div>
       </button>
 
-      <div className="flex gap-2 px-3 pb-3 pt-3">
-        <button
-          type="button"
-          onClick={() => onLocate(product)}
-          className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-white/6 px-3 text-xs font-semibold text-white ring-1 ring-white/10"
-        >
-          <MapPin className="h-4 w-4 text-[#FF6B81]" />
-          マップで場所を見る
-        </button>
-        <QuickLink product={product} />
-      </div>
+      {booth || hasQuickLink(product) ? (
+        <div className="flex gap-2 px-3 pb-3 pt-3">
+          {booth ? (
+            <button
+              type="button"
+              onClick={() => onLocate(product)}
+              className="flex min-h-11 flex-1 items-center justify-center gap-1.5 rounded-2xl bg-black/6 dark:bg-white/6 px-3 text-xs font-semibold text-slate-900 dark:text-white ring-1 ring-black/10 dark:ring-white/10"
+            >
+              <MapPin className="h-4 w-4 text-[#FF6B81]" />
+              マップで場所を見る
+            </button>
+          ) : null}
+          <QuickLink product={product} />
+        </div>
+      ) : (
+        <div className="h-3" />
+      )}
     </article>
   );
 }
 
 function QuickLink({ product }: { product: Product }) {
-  const link =
-    product.links.web ??
-    product.links.appStore ??
-    product.links.googlePlay ??
-    product.links.github;
-
+  const link = product.links.web ?? product.links.slide;
   if (!link) return null;
-
-  const isApp = Boolean(product.links.appStore || product.links.googlePlay);
-  const isGithub = !product.links.web && !isApp && Boolean(product.links.github);
-  const Icon = isGithub ? Code : isApp ? Smartphone : ExternalLink;
-  const label = isGithub ? "GitHub" : isApp ? "ストア" : "Webを開く";
 
   return (
     <a
@@ -73,8 +80,8 @@ function QuickLink({ product }: { product: Product }) {
         "bg-linear-to-r from-[#FF6B81] to-[#FF8E53] text-white",
       )}
     >
-      <Icon className="h-4 w-4" />
-      {label}
+      <ExternalLink className="h-4 w-4" />
+      {product.links.web ? "Webを開く" : "スライド"}
     </a>
   );
 }

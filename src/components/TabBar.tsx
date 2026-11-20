@@ -18,8 +18,8 @@ const TABS: { id: ViewMode; label: string; icon: typeof LayoutGrid }[] = [
 
 export function TabBar({ view, onViewChange }: TabBarProps) {
   return (
-    <nav className="relative z-20 shrink-0 border-t border-white/5 bg-slate-950 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
-      <div className="relative grid grid-cols-2 rounded-2xl bg-slate-900/90 p-1 ring-1 ring-white/8">
+    <nav className="relative z-20 shrink-0 border-t border-black/5 dark:border-white/5 bg-slate-50 dark:bg-slate-950 px-3 pt-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+      <div className="relative grid grid-cols-2 rounded-2xl bg-white/90 dark:bg-slate-900/90 p-1 ring-1 ring-black/8 dark:ring-white/8">
         {TABS.map((tab) => {
           const Icon = tab.icon;
           const active = view === tab.id;

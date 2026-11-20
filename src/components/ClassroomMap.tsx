@@ -1,66 +1,109 @@
 "use client";
 
-import { tables } from "@/data/tables";
+import { booths, MAP_VIEW, PROJECTOR } from "@/data/booths";
 import { cn } from "@/lib/cn";
-import type { TableId } from "@/types/product";
+import type { Booth } from "@/types/product";
 
 interface ClassroomMapProps {
-  selectedTableId: TableId | null;
-  focusedTableId: TableId | null;
-  onSelectTable: (tableId: TableId) => void;
+  focusedBoothId: string | null;
+  onSelectBooth: (booth: Booth) => void;
 }
 
-export function ClassroomMap({
-  selectedTableId,
-  focusedTableId,
-  onSelectTable,
-}: ClassroomMapProps) {
+const px = (value: number) => `${((value - MAP_VIEW.x) / MAP_VIEW.width) * 100}%`;
+const py = (value: number) => `${((value - MAP_VIEW.y) / MAP_VIEW.height) * 100}%`;
+const pw = (value: number) => `${(value / MAP_VIEW.width) * 100}%`;
+const ph = (value: number) => `${(value / MAP_VIEW.height) * 100}%`;
+
+export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProps) {
   return (
-    <section className="rounded-[28px] border border-cyan-300/15 bg-[#07111f] p-3 shadow-[inset_0_0_80px_rgba(14,116,144,0.18)]">
-      <div className="mb-2 flex items-center justify-between px-1 text-[10px] font-semibold tracking-[0.2em] text-cyan-200/70">
-        <span>CLASSROOM BLUEPRINT</span>
-        <span>ROOM 3204</span>
-      </div>
-
-      <div className="relative aspect-4/5 overflow-hidden rounded-3xl bg-[#081525] blueprint-grid ring-1 ring-cyan-400/20">
-        <p className="absolute left-1/2 top-1.5 z-10 -translate-x-1/2 rounded-full bg-slate-950/80 px-3 py-1 text-[10px] font-semibold tracking-widest text-cyan-100">
-          黒板・演台側
-        </p>
-        <p className="absolute bottom-1.5 left-1/2 z-10 -translate-x-1/2 rounded-full bg-slate-950/80 px-3 py-1 text-[10px] font-semibold tracking-widest text-cyan-100">
-          出入口（廊下側）
-        </p>
-        <p className="absolute left-2 top-1/2 z-10 -translate-y-1/2 text-[10px] font-semibold tracking-[0.35em] text-sky-200/80 [writing-mode:vertical-rl]">
-          窓側
-        </p>
-        <p className="absolute right-2 top-1/2 z-10 -translate-y-1/2 text-[10px] font-semibold tracking-[0.35em] text-amber-100/80 [writing-mode:vertical-rl]">
-          廊下
-        </p>
-
-        <div className="absolute left-[10%] right-[10%] top-[8%] h-[6%] rounded-md border border-cyan-200/40 bg-cyan-300/10" />
-        <div className="absolute left-[38%] top-[14.5%] h-[4%] w-[24%] rounded-sm border border-orange-300/40 bg-orange-400/15" />
-        <div className="absolute bottom-[8%] right-[4%] flex h-[7%] w-[12%] items-center justify-center rounded-md border border-rose-300/50 bg-rose-400/20 text-[9px] font-bold text-rose-100">
-          IN
+    <section
+      className="mx-auto"
+      style={{ width: "min(100%, calc((100dvh - 150px) * 0.572))" }}
+    >
+      <div
+        className="relative w-full overflow-hidden rounded-3xl bg-white ring-1 ring-rose-200 shadow-[0_8px_30px_rgba(255,107,129,0.15)]"
+        style={{ aspectRatio: `${MAP_VIEW.width} / ${MAP_VIEW.height}` }}
+      >
+        <div
+          className="absolute flex items-center justify-center rounded-md border border-rose-200 bg-rose-50"
+          style={{
+            left: px(PROJECTOR.x),
+            top: py(PROJECTOR.y),
+            width: pw(PROJECTOR.w),
+            height: ph(PROJECTOR.h),
+          }}
+        >
+          <span className="text-[10px] font-semibold tracking-[0.5em] text-rose-400 [writing-mode:vertical-rl]">
+            プロジェクター
+          </span>
         </div>
 
-        {tables.map((table) => {
-          const selected = selectedTableId === table.id;
-          const focused = focusedTableId === table.id;
+        {/* 中央の空きスペースにブース名の一覧 */}
+        <ul
+          className="absolute flex flex-col justify-center gap-[1px]"
+          style={{
+            left: px(150),
+            width: pw(390),
+            top: py(350),
+            height: ph(830),
+          }}
+        >
+          {booths.map((booth) => (
+            <li key={booth.id}>
+              <button
+                type="button"
+                onClick={() => onSelectBooth(booth)}
+                className="flex w-full items-center gap-1.5 rounded-md px-1 py-[3px] text-left"
+              >
+                <span
+                  className={cn(
+                    "flex h-4 w-4 shrink-0 items-center justify-center rounded text-[9px] font-black",
+                    booth.productId ? "bg-[#FF6B81] text-white" : "bg-rose-100 text-rose-400",
+                  )}
+                >
+                  {booth.id}
+                </span>
+                <span
+                  className={cn(
+                    "truncate text-[10px] leading-tight",
+                    booth.productId ? "font-semibold text-black" : "text-black/45",
+                  )}
+                >
+                  {booth.name}
+                  {booth.note ? `（${booth.note}）` : ""}
+                </span>
+              </button>
+            </li>
+          ))}
+        </ul>
+
+        {booths.map((booth) => {
+          const focused = focusedBoothId === booth.id;
           return (
             <button
-              key={table.id}
+              key={booth.id}
               type="button"
-              onClick={() => onSelectTable(table.id)}
-              style={table.position}
+              aria-label={`ブース${booth.id} ${booth.name}`}
+              onClick={() => onSelectBooth(booth)}
+              style={{
+                left: px(booth.rect.x),
+                top: py(booth.rect.y),
+                width: pw(booth.rect.w),
+                height: ph(booth.rect.h),
+                transform: booth.rect.rot ? `rotate(${booth.rect.rot}deg)` : undefined,
+              }}
               className={cn(
-                "absolute flex min-h-11 flex-col items-center justify-center rounded-2xl border text-center transition-all",
-                selected
-                  ? "border-[#FF6B81] bg-[#FF6B81]/20 text-white shadow-[0_0_24px_rgba(255,107,129,0.55)]"
-                  : "border-cyan-300/30 bg-slate-900/70 text-cyan-50 hover:border-cyan-200/70",
-                focused && "animate-table-pulse",
+                "absolute flex items-center justify-center rounded-lg border text-sm font-black leading-none transition-all",
+                booth.productId
+                  ? "border-[#FF6B81] bg-[#FFB3C0] text-black"
+                  : "border-rose-200 bg-rose-50 text-black/50",
+                focused &&
+                  "animate-table-pulse border-[#FF6B81] bg-[#FF6B81] text-white",
               )}
             >
-              <span className="text-[11px] font-semibold tracking-wide text-cyan-100/80">TABLE</span>
-              <span className="text-xl font-black leading-none">{table.id}</span>
+              <span style={booth.rect.rot ? { transform: `rotate(${-booth.rect.rot}deg)` } : undefined}>
+                {booth.id}
+              </span>
             </button>
           );
         })}

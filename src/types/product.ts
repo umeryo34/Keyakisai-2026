@@ -1,5 +1,4 @@
 export type Category = "All" | "Web" | "App" | "Game" | "Hardware" | "Design";
-export type TableId = "A" | "B" | "C" | "D" | "E";
 
 export interface Author {
   name: string;
@@ -13,28 +12,27 @@ export interface Product {
   catchphrase: string;
   description: string;
   category: Exclude<Category, "All">;
-  tableId: TableId;
   thumbnail: string;
   authors: Author[];
+  team?: string;
+  period?: string;
+  motivation?: string;
+  highlights?: string[];
+  appeals?: string[];
   links: {
     web?: string;
-    appStore?: string;
-    googlePlay?: string;
-    github?: string;
     demoVideo?: string;
+    slide?: string;
   };
   techStack: string[];
-  boothExperience: string;
 }
 
-export interface TableInfo {
-  id: TableId;
+export interface Booth {
+  id: string;
   name: string;
-  description: string;
-  position: {
-    top: string;
-    left: string;
-    width: string;
-    height: string;
-  };
+  note?: string;
+  /** 関連づける Product の id（未登録のブースは未指定） */
+  productId?: string;
+  /** マップ上の位置（論理座標 688 x 1209） */
+  rect: { x: number; y: number; w: number; h: number; rot?: number };
 }

@@ -31,7 +31,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: "#020617",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f8fafc" },
+    { media: "(prefers-color-scheme: dark)", color: "#020617" },
+  ],
   width: "device-width",
   initialScale: 1,
   maximumScale: 1,
@@ -43,7 +46,7 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="ja"
       className={`${geistSans.variable} ${geistMono.variable} ${notoSansJp.variable} h-full antialiased`}
     >
-      <body className="min-h-full bg-zinc-950 font-sans text-slate-50">{children}</body>
+      <body className="min-h-full bg-slate-50 font-sans text-slate-900 dark:bg-zinc-950 dark:text-slate-50">{children}</body>
     </html>
   );
 }
