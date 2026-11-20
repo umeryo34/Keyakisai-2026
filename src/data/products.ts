@@ -19,7 +19,8 @@ export const products: Product[] = [
     id: "manzai",
     title: "MANZAI",
     catchphrase: "タイミングよく正しくツッコんで高得点を目指そう！",
-    description: "漫才のゲームです！タイミングよく正しくツッコんで高得点を目指そう！",
+    description:
+      "漫才のゲームです！タイミングよく正しくツッコんで高得点を目指そう！",
     category: "Game",
     thumbnail: manzaiImg.src,
     authors: [
@@ -69,7 +70,9 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       "世界観：幻想的で温かみのあるデザインと、個性的な二人の宇宙人が魅力です。",
       "徹底した習慣化の基礎づくり：登録できるタスクは1つのみ。60話のストーリーで約1カ月間あなたのやる気をサポートし続けます。",
     ],
-    links: {},
+    links: {
+      web: "https://sleguas.com/pages/toval",
+    },
     techStack: [],
   },
   {
@@ -90,7 +93,9 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       "デザインと機能面にはこだわりました！デザインではDayliaという名前もあり、花を取り入れて鮮やかに仕上げました。",
       "機能面では、自分たちで記録だけでなく、シェア機能を付けて他人と共有できるようにしました。1か月終わった時に1か月分の写真をまとめてシェアできるので、たくさんの人とどんな1か月をおくったのか共有してほしいです！",
     ],
-    links: {},
+    links: {
+      web: "https://dopa-pong.vercel.app",
+    },
     techStack: [],
   },
   {
@@ -210,7 +215,9 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
     highlights: [
       "Raspberry Pi 5に4万ぐらい払ってます。今回の展示物の中で一番金使ってる自信があります。",
     ],
-    appeals: ["今回のサムネイルはすべてGPT-6 Astraに作らせました。AIってすごいね。"],
+    appeals: [
+      "今回のサムネイルはすべてGPT-6 Astraに作らせました。AIってすごいね。",
+    ],
     links: {},
     techStack: ["Raspberry Pi 5", "Laya-Multilingual"],
   },
@@ -322,8 +329,7 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       { name: "あやな", grade: "1年" },
       { name: "まこと", grade: "1年" },
     ],
-    links: {
-    },
+    links: {},
     techStack: [""],
   },
   {
@@ -341,10 +347,9 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       { name: "はやと", grade: "3年" },
     ],
     links: {
-      web: "https://peachtech.jp",
+      web: "https://tokiwa-calendar.com/welcome",
       demoVideo: "https://www.youtube.com",
     },
     techStack: ["Unity", "C#", "Aseprite"],
   },
 ];
-
