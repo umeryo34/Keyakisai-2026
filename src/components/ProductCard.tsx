@@ -2,13 +2,14 @@
 
 import { ExternalLink, MapPin } from "lucide-react";
 import { getBoothByProduct } from "@/data/booths";
+import { useBeforeDay2 } from "@/lib/schedule";
 import { formatAuthors } from "@/lib/labels";
 import { cn } from "@/lib/cn";
 import type { Product } from "@/types/product";
 
 function hasQuickLink(product: Product) {
   return Boolean(
-    product.links.web || product.links.slide,
+    product.links.web || product.links.appStore || product.links.slide,
   );
 }
 
@@ -20,6 +21,8 @@ interface ProductCardProps {
 
 export function ProductCard({ product, onOpen, onLocate }: ProductCardProps) {
   const booth = getBoothByProduct(product.id);
+  const beforeDay2 = useBeforeDay2();
+  const closed = Boolean(booth?.day2Only) && beforeDay2;
   return (
     <article className="overflow-hidden rounded-3xl border border-black/8 dark:border-white/8 bg-white/80 dark:bg-slate-900/80 shadow-[0_18px_40px_rgba(0,0,0,0.28)]">
       <button type="button" onClick={() => onOpen(product)} className="block w-full text-left">
@@ -34,6 +37,11 @@ export function ProductCard({ product, onOpen, onLocate }: ProductCardProps) {
             {booth ? (
               <span className="rounded-full bg-[#FF6B81]/90 px-2.5 py-1 text-[11px] font-semibold text-white">
                 ブース {booth.id}
+              </span>
+            ) : null}
+            {closed ? (
+              <span className="rounded-full bg-slate-800/85 px-2.5 py-1 text-[11px] font-semibold text-white">
+                本日は出店なし（2日目のみ）
               </span>
             ) : null}
           </div>
@@ -67,7 +75,7 @@ export function ProductCard({ product, onOpen, onLocate }: ProductCardProps) {
 }
 
 function QuickLink({ product }: { product: Product }) {
-  const link = product.links.web ?? product.links.slide;
+  const link = product.links.web ?? product.links.appStore ?? product.links.slide;
   if (!link) return null;
 
   return (
@@ -76,12 +84,12 @@ function QuickLink({ product }: { product: Product }) {
       target="_blank"
       rel="noopener noreferrer"
       className={cn(
-        "flex min-h-11 min-w-11 items-center justify-center gap-1.5 rounded-2xl px-3 text-xs font-semibold",
+        "flex min-h-11 min-w-11 flex-1 items-center justify-center gap-1.5 rounded-2xl px-3 text-xs font-semibold",
         "bg-linear-to-r from-[#FF6B81] to-[#FF8E53] text-white",
       )}
     >
       <ExternalLink className="h-4 w-4" />
-      {product.links.web ? "Webを開く" : "スライド"}
+      {product.links.web ? "Webを開く" : product.links.appStore ? "App Storeで見る" : "スライド"}
     </a>
   );
 }

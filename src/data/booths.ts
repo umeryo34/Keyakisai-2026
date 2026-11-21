@@ -20,7 +20,7 @@ export const booths: Booth[] = [
   { id: "1", name: "TOVAL", productId: "toval", rect: box(560, 1048) },
   { id: "2", name: "あとめも", productId: "atomemo", rect: box(560, 914) },
   { id: "3", name: "Daylia(デイリア)", productId: "daylia", rect: box(560, 780) },
-  { id: "4", name: "MANZAI", note: "2日目のみ", productId: "manzai", rect: box(560, 608) },
+  { id: "4", name: "MANZAI", note: "2日目のみ", day2Only: true, productId: "manzai", rect: box(560, 608) },
   { id: "5", name: "dranker", productId: "dranker", rect: box(560, 474) },
   { id: "6", name: "Wealy", productId: "wealy", rect: box(560, 340) },
   // 上部（右側）：弧状に並べて 6 とつなぐ
@@ -32,7 +32,7 @@ export const booths: Booth[] = [
   { id: "11", name: "勤怠管理システム", rect: arcBox(91, 124, -40) },
   { id: "12", name: "AIハードウェア マインクラフト", rect: arcBox(32, 244, -91) },
   // 左列（出入口側）
-  { id: "13", name: "ももPay", note: "2日目のみ", productId: "momo-pay", rect: box(64, 340) },
+  { id: "13", name: "ももPay", note: "2日目のみ", day2Only: true, productId: "momo-pay", rect: box(64, 340) },
   { id: "14", name: "送迎チーム分け", productId: "carpool", rect: box(64, 474) },
   { id: "15", name: "ScheduleFitter", productId: "schedule-fitter", rect: box(64, 608) },
   { id: "16", name: "CHILL-NIGHT", productId: "chill-night", rect: box(64, 780) },

@@ -13,6 +13,14 @@ import { products } from "@/data/products";
 import { getBoothByProduct } from "@/data/booths";
 import type { Booth, Product } from "@/types/product";
 
+const boothNumber = (productId: string) => {
+  const booth = getBoothByProduct(productId);
+  return booth ? Number(booth.id) : Number.MAX_SAFE_INTEGER;
+};
+
+/** ブース番号の小さい順（番号のないものは最後） */
+const sortedProducts = [...products].sort((a, b) => boothNumber(a.id) - boothNumber(b.id));
+
 export default function Home() {
   const [view, setView] = useState<ViewMode>("list");
   const [noticeBooth, setNoticeBooth] = useState<Booth | null>(null);
@@ -52,7 +60,7 @@ export default function Home() {
               exit={{ opacity: 0, x: 24 }}
               transition={{ duration: 0.22, ease: "easeOut" }}
             >
-              <ProductList products={products} onOpen={setActiveProduct} onLocate={locateOnMap} />
+              <ProductList products={sortedProducts} onOpen={setActiveProduct} onLocate={locateOnMap} />
             </motion.div>
           ) : (
             <motion.div
