@@ -1,9 +1,10 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { ExternalLink, Globe, Presentation, Video, X } from "lucide-react";
+import { ExternalLink, Globe, Presentation, Smartphone, Video, X } from "lucide-react";
 import { useEffect } from "react";
 import { getBoothByProduct } from "@/data/booths";
+import { useBeforeDay2 } from "@/lib/schedule";
 import { formatAuthors } from "@/lib/labels";
 import type { Product } from "@/types/product";
 
@@ -13,6 +14,8 @@ interface ProductDrawerProps {
 }
 
 export function ProductDrawer({ product, onClose }: ProductDrawerProps) {
+  const beforeDay2 = useBeforeDay2();
+  const closedToday = Boolean(product && getBoothByProduct(product.id)?.day2Only) && beforeDay2;
   useEffect(() => {
     if (!product) return;
     const previous = document.body.style.overflow;
@@ -75,6 +78,11 @@ export function ProductDrawer({ product, onClose }: ProductDrawerProps) {
                   </span>
                 ) : null}
               </div>
+              {closedToday ? (
+                <p className="mt-3 rounded-2xl bg-slate-100 dark:bg-slate-800 px-3 py-2 text-xs font-semibold text-slate-700 dark:text-slate-200">
+                  このブースは2日目（11/22）のみの出店です。本日（11/21）は出店していません。
+                </p>
+              ) : null}
               <h2 id="product-drawer-title" className="mt-3 text-2xl font-bold text-slate-900 dark:text-white">
                 {product.title}
               </h2>
@@ -137,6 +145,9 @@ export function ProductDrawer({ product, onClose }: ProductDrawerProps) {
               <div className="mt-5 grid grid-cols-2 gap-2">
                 {product.links.web ? (
                   <LinkButton href={product.links.web} label="Webを開く" icon={Globe} />
+                ) : null}
+                {product.links.appStore ? (
+                  <LinkButton href={product.links.appStore} label="App Storeで見る" icon={Smartphone} />
                 ) : null}
                 {product.links.demoVideo ? (
                   <LinkButton href={product.links.demoVideo} label="デモ動画" icon={Video} />

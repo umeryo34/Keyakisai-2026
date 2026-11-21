@@ -21,6 +21,7 @@ export interface Product {
   appeals?: string[];
   links: {
     web?: string;
+    appStore?: string;
     demoVideo?: string;
     slide?: string;
   };
@@ -31,6 +32,8 @@ export interface Booth {
   id: string;
   name: string;
   note?: string;
+  /** 2日目のみ出店するブース */
+  day2Only?: boolean;
   /** 関連づける Product の id（未登録のブースは未指定） */
   productId?: string;
   /** マップ上の位置（論理座標 688 x 1209） */

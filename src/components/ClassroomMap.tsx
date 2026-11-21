@@ -2,6 +2,7 @@
 
 import { booths, MAP_VIEW, PROJECTOR } from "@/data/booths";
 import { cn } from "@/lib/cn";
+import { useBeforeDay2 } from "@/lib/schedule";
 import type { Booth } from "@/types/product";
 
 interface ClassroomMapProps {
@@ -15,6 +16,7 @@ const pw = (value: number) => `${(value / MAP_VIEW.width) * 100}%`;
 const ph = (value: number) => `${(value / MAP_VIEW.height) * 100}%`;
 
 export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProps) {
+  const beforeDay2 = useBeforeDay2();
   return (
     <section
       className="mx-auto"
@@ -48,7 +50,9 @@ export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProp
             height: ph(830),
           }}
         >
-          {booths.map((booth) => (
+          {booths.map((booth) => {
+            const closed = Boolean(booth.day2Only) && beforeDay2;
+            return (
             <li key={booth.id}>
               <button
                 type="button"
@@ -67,18 +71,21 @@ export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProp
                   className={cn(
                     "truncate text-[10px] leading-tight",
                     booth.productId ? "font-semibold text-black" : "text-black/45",
+                    closed && "font-normal text-black/40 line-through",
                   )}
                 >
                   {booth.name}
-                  {booth.note ? `（${booth.note}）` : ""}
+                  {closed ? "（本日休み）" : booth.note ? `（${booth.note}）` : ""}
                 </span>
               </button>
             </li>
-          ))}
+            );
+          })}
         </ul>
 
         {booths.map((booth) => {
           const focused = focusedBoothId === booth.id;
+          const closed = Boolean(booth.day2Only) && beforeDay2;
           return (
             <button
               key={booth.id}
@@ -94,9 +101,11 @@ export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProp
               }}
               className={cn(
                 "absolute flex items-center justify-center rounded-lg border text-sm font-black leading-none transition-all",
-                booth.productId
-                  ? "border-[#FF6B81] bg-[#FFB3C0] text-black"
-                  : "border-rose-200 bg-rose-50 text-black/50",
+                closed
+                  ? "border-dashed border-slate-300 bg-slate-100 text-slate-400"
+                  : booth.productId
+                    ? "border-[#FF6B81] bg-[#FFB3C0] text-black"
+                    : "border-rose-200 bg-rose-50 text-black/50",
                 focused &&
                   "animate-table-pulse border-[#FF6B81] bg-[#FF6B81] text-white",
               )}
@@ -104,6 +113,13 @@ export function ClassroomMap({ focusedBoothId, onSelectBooth }: ClassroomMapProp
               <span style={booth.rect.rot ? { transform: `rotate(${-booth.rect.rot}deg)` } : undefined}>
                 {booth.id}
               </span>
+              {closed ? (
+                <span className="absolute inset-x-0 bottom-1 text-center text-[8px] font-semibold leading-tight text-slate-500">
+                  本日
+                  <br />
+                  休み
+                </span>
+              ) : null}
             </button>
           );
         })}

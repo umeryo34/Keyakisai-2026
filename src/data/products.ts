@@ -145,7 +145,7 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       "カレンダー機能とクローゼット機能で持っている服やコーディネートを可愛く管理できる。それだけでなくもっと使いやすいような機能を開発中。",
     ],
     links: {
-      web: "https://apps.apple.com/jp/app/wealy-%E3%82%A6%E3%82%A7%E3%82%A2%E3%83%AA%E3%83%BC-%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%83%E3%83%88-%E6%B4%8B%E6%9C%8D%E7%AE%A1%E7%90%86-%E3%82%B3%E3%83%BC%E3%83%87%E8%A8%98%E9%8C%B2/id6755212242",
+      appStore: "https://apps.apple.com/jp/app/wealy-%E3%82%A6%E3%82%A7%E3%82%A2%E3%83%AA%E3%83%BC-%E3%82%AF%E3%83%AD%E3%83%BC%E3%82%BC%E3%83%83%E3%83%88-%E6%B4%8B%E6%9C%8D%E7%AE%A1%E7%90%86-%E3%82%B3%E3%83%BC%E3%83%87%E8%A8%98%E9%8C%B2/id6755212242",
     },
     techStack: [],
   },
@@ -330,7 +330,7 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
       { name: "まこと", grade: "1年" },
     ],
     links: {},
-    techStack: [""],
+    techStack: [],
   },
   {
     id: "tokiwa",
@@ -348,7 +348,6 @@ TestFlightで短期バージョンをユーザーに体験していただき、�
     ],
     links: {
       web: "https://tokiwa-calendar.com/welcome",
-      demoVideo: "https://www.youtube.com",
     },
     techStack: ["Unity", "C#", "Aseprite"],
   },
